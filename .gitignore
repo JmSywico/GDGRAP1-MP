@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+*.ipch
+/GDGRAP Playbook/x64/Debug
+/GDGRAP Playbook/x64/Release
