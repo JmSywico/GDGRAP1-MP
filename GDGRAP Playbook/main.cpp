@@ -294,6 +294,7 @@ int main(void) {
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
         glm::mat4 view = activeCamera->GetViewMatrix();
 
+        // Update Camera Position
         if (activeCamera == &perspectiveCamera) {
             dynamic_cast<PerspectiveCamera*>(activeCamera)->UpdateCameraPosition(carPosition, carRotationY);
         }
@@ -306,6 +307,7 @@ int main(void) {
 
         glUseProgram(shaderProgram);
 
+        // Directional Light direction,location,color and intensity
         glm::vec3 lightOffset(0.0f, 5.0f, 0.0f);
         glm::vec3 lightDirection = carPosition + lightOffset;
         directionalLightDir = glm::normalize(carPosition - lightDirection);
@@ -327,11 +329,12 @@ int main(void) {
         player1.SetVelocity(carVelocity);
         player1.SetRotationY(carRotationY);
 
+        // car movements and speed
         if (isCarsMoving) {
             car2Position.z += car2Velocity * deltaTime; 
             car3Position.z += car3Velocity * deltaTime; 
         }
-
+        // Printing of Console which cars have reached finish line
         if (!isCar1Finished && CheckCollision(carPosition, tirePosition, tireColliderSize)) {
             isCar1Finished = true;
             std::cout << "Car 1 Finished!" << std::endl;
@@ -345,12 +348,15 @@ int main(void) {
             std::cout << "Car 3 Finished!" << std::endl;
         }
 
+        // Game Over Print
         if (isCar1Finished && isCar2Finished && isCar3Finished && !printTimeOnce) {
             auto endTime = std::chrono::steady_clock::now();
             std::chrono::duration<float> elapsed = endTime - startTime;
             std::cout << "Game Over! All karts finished in: " << elapsed.count() << " seconds" << std::endl;
             printTimeOnce = true;
         }
+
+        // Objects Drawings called below
         player1.Draw(shaderProgram, projection, view);
 
         glm::mat4 tireTransform = glm::mat4(1.0f);
